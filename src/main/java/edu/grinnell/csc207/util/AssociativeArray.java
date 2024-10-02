@@ -10,7 +10,7 @@ import static java.lang.reflect.Array.newInstance;
  * @param <K> the key type
  * @param <V> the value type
  *
- * @author Your Name Here
+ * @author Nicole Gorrell
  * @author Samuel A. Rebelsky
  */
 public class AssociativeArray<K, V> {
@@ -62,7 +62,15 @@ public class AssociativeArray<K, V> {
    * @return a new copy of the array
    */
   public AssociativeArray<K, V> clone() {
-    return null; // STUB
+    AssociativeArray<K, V> newArray = new AssociativeArray<>(); // create and initialize new array
+
+    for(int i = 0; i < this.size; i ++) {
+        // assign this key/val to placement in array copy
+        newArray.pairs[i].key = this.pairs[i].key;
+        newArray.pairs[i].val = this.pairs[i].val;
+    } // for
+
+    return newArray; // STUB
   } // clone()
 
   /**
@@ -91,7 +99,21 @@ public class AssociativeArray<K, V> {
    *   If the client provides a null key.
    */
   public void set(K key, V value) throws NullKeyException {
-    // STUB
+    if(key == null) { // null cannot be a valid key
+      throw new NullKeyException();   
+    }
+
+    for(int i = 0; i < this.size; i++) {
+      if(this.pairs[i].key == key) { // if the key exists, set will override currently paired value
+        this.pairs[i].val = value;
+      } // if
+    } // for
+
+    // else, create a new array that will take on refernce to 'this', with the current key/value pairs
+    AssociativeArray<K, V> stretchArray = this; 
+    stretchArray.size = this.size + 1; // make space at end of new array to set key and value
+    stretchArray.pairs[this.size - 1].key = key;
+    stretchArray.pairs[this.size - 1].val = value;
   } // set(K,V)
 
   /**
@@ -107,7 +129,16 @@ public class AssociativeArray<K, V> {
    *   when the key is null or does not appear in the associative array.
    */
   public V get(K key) throws KeyNotFoundException {
-    return null; // STUB
+    for(int i = 0; i < this.size; i++) {
+      if(this.pairs[i].key == null) {
+        throw new KeyNotFoundException(); // if there is a null key
+      } else if(this.pairs[i].key == key) {
+        return this.pairs[i].val;
+      } // if...else
+    } // for
+    
+    // when key is not found in array loop, will throw KeyNotFound exception
+    throw new KeyNotFoundException();
   } // get(K)
 
   /**
