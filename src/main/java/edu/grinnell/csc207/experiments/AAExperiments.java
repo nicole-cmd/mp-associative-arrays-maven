@@ -4,6 +4,8 @@ import edu.grinnell.csc207.util.AssociativeArray;
 
 import java.io.PrintWriter;
 
+import java.lang.Integer;
+
 /**
  * Experiments with Associative Arrays.
  *
@@ -114,6 +116,29 @@ public class AAExperiments {
     set(pen, strings2strings, null, "nothing");
     hasKey(pen, strings2strings, null);
     get(pen, strings2strings, null);
+
+    /** Additional experiments */ 
+    set(pen, strings2strings, "2", "hey"); // set another key
+    pen.println(".toString test: " + strings2strings.toString());
+
+    // FIX CLONE
+    // AssociativeArray stringsClone = new AssociativeArray<String, String>(); // testing clone
+    // stringsClone = strings2strings.clone();
+
+    // pen.println(stringsClone.toString());
+    // stringsClone.remove("k");
+    // pen.println(stringsClone.toString());
+
+    AssociativeArray intArray = new AssociativeArray<Integer, Integer>();
+    intArray.set(1, 2);
+    intArray.set(3, 4);
+
+    pen.println(intArray.toString());
+    pen.println(intArray.get(1).toString());
+
+    // FIX REMOVE
+    intArray.remove(1);
+    pen.println(intArray.toString());
 
     // And we're done.
     pen.close();

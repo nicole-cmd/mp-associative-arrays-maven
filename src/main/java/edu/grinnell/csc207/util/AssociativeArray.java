@@ -62,7 +62,7 @@ public class AssociativeArray<K, V> {
    * @return a new copy of the array
    */
   public AssociativeArray<K, V> clone() {
-    AssociativeArray<K, V> newArray = new AssociativeArray<>(); // create and initialize new array
+    AssociativeArray<K, V> newArray = new AssociativeArray<>(); // create new array
 
     for(int i = 0; i < this.size; i ++) {
         // assign this key/val to placement in array copy
@@ -70,7 +70,7 @@ public class AssociativeArray<K, V> {
         newArray.pairs[i].val = this.pairs[i].val;
     } // for
 
-    return newArray; // STUB
+    return newArray;
   } // clone()
 
   /**
@@ -79,7 +79,18 @@ public class AssociativeArray<K, V> {
    * @return a string of the form "{Key0:Value0, Key1:Value1, ... KeyN:ValueN}"
    */
   public String toString() {
-    return "{}"; // STUB
+    String output = "{";
+
+    for(int i = 0; i < this.size; i++) {
+      output += this.pairs[i].toString();
+
+      if(i < this.size - 1) {
+      output += ", ";
+      } // if
+    } // for
+
+    output += "}";
+    return output;
   } // toString()
 
   // +----------------+----------------------------------------------
@@ -101,19 +112,27 @@ public class AssociativeArray<K, V> {
   public void set(K key, V value) throws NullKeyException {
     if(key == null) { // null cannot be a valid key
       throw new NullKeyException();   
-    }
+    } // if
 
-    for(int i = 0; i < this.size; i++) {
-      if(this.pairs[i].key == key) { // if the key exists, set will override currently paired value
-        this.pairs[i].val = value;
+    if (this.size == 0) { // if the array is created but uninitialized
+      this.pairs[0] = new KVPair<K,V>(key, value); // create new KVPair to set key/value
+      this.size++; // increment associative array by one for null space at the end
+      return;
+    } // if
+
+    if (this.size != 0) {
+      if (this.hasKey(key)) {
+        for(int i = 0; i < this.size; i++) { // if key exists, cycle through to override current value
+          this.pairs[i].val = value;
+        } // for
       } // if
-    } // for
 
-    // else, create a new array that will take on refernce to 'this', with the current key/value pairs
-    AssociativeArray<K, V> stretchArray = this; 
-    stretchArray.size = this.size + 1; // make space at end of new array to set key and value
-    stretchArray.pairs[this.size - 1].key = key;
-    stretchArray.pairs[this.size - 1].val = value;
+      // else - increment assoc. array size to make room at end for new KVPair 
+      this.size++;
+      this.pairs[this.size - 1] = new KVPair<K, V>(key, value); 
+    } // if
+
+    return;
   } // set(K,V)
 
   /**
@@ -129,7 +148,7 @@ public class AssociativeArray<K, V> {
    *   when the key is null or does not appear in the associative array.
    */
   public V get(K key) throws KeyNotFoundException {
-    for(int i = 0; i < this.size; i++) {
+    for(int i = 0; i < this.size; i++) { // cycles through array to see if there is a matching key
       if(this.pairs[i].key == null) {
         throw new KeyNotFoundException(); // if there is a null key
       } else if(this.pairs[i].key == key) {
@@ -151,7 +170,12 @@ public class AssociativeArray<K, V> {
    * @return true if the key appears and false otherwise.
    */
   public boolean hasKey(K key) {
-    return false; // STUB
+    for(int i = 0; i < this.size; i++) { // cycles through array to see if there is a matching key
+      if(this.pairs[i].key == key) {
+        return true;
+      }  // if
+    } // for
+    return false; // if key is not there/key is null
   } // hasKey(K)
 
   /**
@@ -163,7 +187,22 @@ public class AssociativeArray<K, V> {
    *   The key to remove.
    */
   public void remove(K key) {
-    // STUB
+    if(this.hasKey(key)) { // do nothing if array doesn't have the key
+      for(int i = 0; i < this.size; i++) { // looks for the key
+        if(this.pairs[i].key == key) {
+          // assign the key/val pairs in this position to subsequent pair (updates val, too)
+          this.pairs[i].key = this.pairs[i++].key;
+          System.out.println("new key: " + this.pairs[i].key);
+          System.out.println("new val: " + this.pairs[i].val);
+          this.pairs[i--] = this.pairs[i]; 
+          // get rid of extra space by decrementing size
+          this.size--;
+          return;
+        } // if
+      } // for
+    } // if
+
+    return;
   } // remove(K)
 
   /**
