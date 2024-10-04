@@ -63,7 +63,14 @@ public class AssociativeArray<K, V> {
    */
   public AssociativeArray<K, V> clone() {
     AssociativeArray<K, V> newArray = new AssociativeArray<>(); // create new array to clone to
-    newArray.size = this.size; // set size of array
+
+    newArray.size = DEFAULT_CAPACITY; // set size of array
+
+    if (this.size >= DEFAULT_CAPACITY) {
+      while(newArray.size < this.size) { // iterate expand on newArray for every value between newArray.size and this.size
+        this.expand();
+      } // while
+    } // if 
 
     for(int i = 0; i < this.size; i ++) { // cycle through each pair element in assoc. array
       newArray.pairs[i] = this.pairs[i].clone(); // assign this key/val to placement in array copy
@@ -132,6 +139,10 @@ public class AssociativeArray<K, V> {
       this.size++;
       this.pairs[this.size - 1] = new KVPair<K, V>(key, value); 
     } // if
+
+    if (this.size >= DEFAULT_CAPACITY) {
+      this.expand();
+    } // if 
 
     return;
   } // set(K,V)
