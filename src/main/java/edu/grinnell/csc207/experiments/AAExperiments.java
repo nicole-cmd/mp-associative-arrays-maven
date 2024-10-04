@@ -119,26 +119,25 @@ public class AAExperiments {
 
     /** Additional experiments */ 
     set(pen, strings2strings, "2", "hey"); // set another key
-    pen.println(".toString test: " + strings2strings.toString());
+    pen.println(".toString test: " + strings2strings.toString()); // ensure .toString() can facilitate printing of whole array
 
-    // FIX CLONE
-    // AssociativeArray stringsClone = new AssociativeArray<String, String>(); // testing clone
-    // stringsClone = strings2strings.clone();
+    // testing clone
+    AssociativeArray stringsClone = new AssociativeArray<String, String>(); 
+    stringsClone = strings2strings.clone(); // assign the clone to the new, uninitialized array
+    pen.println(".clone() test: " + stringsClone.toString());
+    stringsClone.remove("k");
+    pen.println(stringsClone.toString()); // see if the previous line successfully removed key "k" from cloned array
 
-    // pen.println(stringsClone.toString());
-    // stringsClone.remove("k");
-    // pen.println(stringsClone.toString());
-
+    // testing different types - Integers
     AssociativeArray intArray = new AssociativeArray<Integer, Integer>();
     intArray.set(1, 2);
     intArray.set(3, 4);
 
-    pen.println(intArray.toString());
-    pen.println(intArray.get(1).toString());
+    pen.println(intArray.toString()); // utilize .toString to print out type <Integer, Integer> array
+    pen.println(intArray.get(1).toString()); // same idea to see what value get(1) returns (global print methods only work for String types)
 
-    // FIX REMOVE
     intArray.remove(1);
-    pen.println(intArray.toString());
+    pen.println(intArray.toString()); // see what happens after removing key 1
 
     // And we're done.
     pen.close();
